@@ -1,0 +1,52 @@
+<html>
+<head>
+<title>Results Interactive Demo</title>
+<style type="text/css">
+body {
+padding: 10px;
+}
+</style>
+</head>
+<body>
+<h1>Interactive figures of <em>"Learning Unsupervised Hierarchies of Audio Concepts"</em></h1>
+
+<p>Please find here the experiment results from our paper with interactive plots.
+We provide additional results that could not fit within the six-page limit for interested readers. </p>
+
+<p>Visualisation of the learned concept activations vectors (<b>Section 3</b>):</p>
+<ul>
+<li><b>Fig 1(b)</b>: <a href='tsne_genres.html'>TSNE of APM's genre concepts<a></li>
+<li><em>(Additional)</em> <a href='tsne_deezer.html'>TSNE of Deezer concepts<a></li>
+</ul>
+
+<p>Visualisation of the learned graph hierarchies (<b>Section 4</b>):</p>
+<ul>
+<li><b>Fig 1(c)</b>: <a href='genres.html'>APM's genre graph<a></li>
+<li><em>(Additional)</em> <a href='moods.html'>APM's mood graph<a></li>
+<li><b>Fig 2</b>: <a href='deezer.html'>Deezer graph with mixed types<a></li>
+</ul>
+
+<p>Visualisation of the experiment structures baselines (<b>Section 5.3.1</b> and <b>Table 2</b>):</p>
+<ul>
+<li><em>(Additional)</em>: <a href='structure_baseline/simmatch.html'>Sparse A<a></li>
+<li><em>(Additional)</em>: <a href='structure_baseline/simtop.html'>Top-1<a></li>
+</ul>
+
+<p>Visualisation of the experiment hierarchies baselines (<b>Section 5.3.3</b> and <b>Table 1</b>):</p>
+<ul>
+<li><em>(Additional)</em>: <a href='similarity_baseline/opt_llm.html'>BERT-based hierarchy<a></li>
+<li><em>(Additional)</em>: <a href='similarity_baseline/opt_mwon.html'>W2V1-based hierarchy<a></li>
+<li><em>(Additional)</em>: <a href='similarity_baseline/opt_sdoh.html'>W2V2-based hierarchy<a></li>
+<li><em>(Additional)</em>: <a href='similarity_baseline/opt_usg.html'>Collaborative filtering based hierarchy<a></li>
+</ul>
+
+
+
+
+<br>
+<p style="text-decoration: underline">Troubleshooting:<p>
+<p>All visualisations use the <a href="https://github.com/vasturiano/force-graph">force-graph.js</a> rendering script. Make sure Javascript is enabled on your browser.</p>
+<p>If everything works properly on your browser, you should be able to see something like this:</p>
+<img src="screenshot.png" alt="graph screenshot" style="width: 800px; border: 1px solid #AAA; margin: 20px;">
+</body>
+</html>

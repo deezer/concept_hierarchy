@@ -1,0 +1,46 @@
+<html>
+<head>
+<title>TSNE APM's Genres</title>
+<script src="force-graph.min.js"></script>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div id="title">TSNE Genres CAVs</div>
+
+<div id="instructions">
+	<div class="instruct"><i>Left-click:</i> move</div>
+	<div class="instruct"><i>Mouse-wheel/middle-click:</i> zoom</div>
+	<div class="instruct"><i>Hover:</i> display label</div>
+	<div class="instruct"><i>Click:</i> open corresponding playlist</div>    
+</div>
+
+<div id="note">Node colors represent <b>ground-truth genre clustering</b>.</div>
+
+
+<div id="graph"></div>
+
+<script>
+	const elem = document.getElementById('graph');
+	
+	fetch('tsne_genres.json').then(res => res.json()).then(data => {
+		console.log(data)
+	
+    	const Graph = ForceGraph()(elem)
+    		.enableNodeDrag(false)
+    		.graphData(data) 
+    		.zoom(7, 0)
+    		.nodeLabel('label')
+    		.nodeRelSize(1)
+    		.nodeAutoColorBy('id')
+    		.linkHoverPrecision(100)
+    		.onNodeClick(node => {
+       			Graph.centerAt(node.x, node.y, 1000);
+        		Graph.zoom(15, 2000);
+      		});
+      
+      });
+  </script>
+
+</body>
+</html>

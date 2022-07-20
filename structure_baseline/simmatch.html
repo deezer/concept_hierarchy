@@ -1,0 +1,42 @@
+<html>
+<head>
+<title>Sparse A baseline</title>
+<script src="../force-graph.min.js"></script>
+<link rel="stylesheet" href="../style.css">
+</head>
+<body>
+
+<div id="title"><em>Sparse A</em> baseline</div>
+
+<div id="instructions">
+	<div class="instruct"><i>Left-click:</i> move</div>
+	<div class="instruct"><i>Mouse-wheel/middle-click:</i> zoom</div>
+	<div class="instruct"><i>Hover:</i> display label</div>
+	<div class="instruct"><i>Click:</i> open corresponding playlist</div>    
+</div>
+
+<div id="note">Node colors are <b>random</b>.</div>
+
+<div id="graph"></div>
+
+<script>
+	const elem = document.getElementById('graph');
+	
+	fetch('simmatch.json').then(res => res.json()).then(data => {
+		console.log(data)
+	
+    	const Graph = ForceGraph()(elem)
+    		.graphData(data) 
+    		.zoom(0.1, 0)
+    		.nodeLabel('label')
+    		.enableNodeDrag(false)
+    		.nodeRelSize(7)
+    		.linkWidth(2)
+    		.linkDirectionalParticles(1)
+    		.onNodeClick(node => window.open(`http://deezer.com/playlist/${node.id}`, '_blank'))
+      
+      });
+  </script>
+
+</body>
+</html>

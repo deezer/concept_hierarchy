@@ -1,0 +1,46 @@
+<html>
+<head>
+<title>Deezer Hierarchy</title>
+<script src="force-graph.min.js"></script>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div id="title">Deezer hierarchy</div>
+
+<div id="instructions">
+	<div class="instruct"><i>Left-click:</i> move</div>
+	<div class="instruct"><i>Mouse-wheel/middle-click:</i> zoom</div>
+	<div class="instruct"><i>Hover:</i> display label</div>
+	<div class="instruct"><i>Click:</i> open corresponding playlist</div>    
+</div>
+
+<div id="note">
+Node colors are <b>random</b>.
+</div>
+
+<div id="graph"></div>
+
+
+  <script>
+	const elem = document.getElementById('graph');
+	
+	fetch('deezer_graph.json').then(res => res.json()).then(data => {  // deezergraph
+		console.log(data)
+	
+    	const Graph = ForceGraph()(elem)
+    		// .backgroundColor('rgb(17, 18, 31)')
+    		.graphData(data) 
+    		.nodeLabel('label')
+    		.enableNodeDrag(false)
+    		.nodeRelSize(7)
+    		.linkWidth(2)
+    		.linkDirectionalParticles(1)
+    		.onNodeClick(node => window.open(`http://deezer.com/playlist/${node.id}`, '_blank'))
+      
+      });
+  </script>
+
+
+</body>
+</html>

@@ -1,0 +1,43 @@
+<html>
+<head>
+<title>TSNE Deezer</title>
+<script src="force-graph.min.js"></script>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div id="title">TSNE Deezer CAVs</div>
+
+<div id="instructions">
+	<div class="instruct"><i>Left-click:</i> move</div>
+	<div class="instruct"><i>Mouse-wheel/middle-click:</i> zoom</div>
+	<div class="instruct"><i>Hover:</i> display label</div>
+	<div class="instruct"><i>Click:</i> open corresponding playlist</div>    
+</div>
+
+<div id="note">
+Node colors are <b>random</b>.
+</div>
+
+<div id="graph"></div>
+
+<script>
+	const elem = document.getElementById('graph');
+	
+	fetch('tsne_deezer.json').then(res => res.json()).then(data => {
+		console.log(data)
+	
+    	const Graph = ForceGraph()(elem)
+    		.enableNodeDrag(false)
+    		.graphData(data) 
+    		.nodeLabel('label')
+    		.nodeRelSize(15)
+    		.nodeAutoColorBy('id')
+    		.linkHoverPrecision(100)
+    		.onNodeClick(node => window.open(`http://deezer.com/playlist/${node.id}`, '_blank'))
+      
+      });
+  </script>
+
+</body>
+</html>
