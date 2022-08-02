@@ -12,7 +12,7 @@ Supposedly, we may be able to upload most training data, but due to copyright is
 
 ## Result demo
 
-You can access results demos at [research.deezer.com/concept_hierarchy/](http://research.deezer.com/concept_hierarchy/), which include useful interaction visualisation of the obtained graphs, as well as additional figures to help better interpret the (dense) tables of results.
+You can access results demos at [research.deezer.com/concept_hierarchy](http://research.deezer.com/concept_hierarchy/), which includes useful interactive visualisations of the obtained graphs, as well as additional figures to help better interpret our (dense) tables of results.
 
 ## References
 
@@ -21,10 +21,10 @@ Contact: [research@deezer.com](mailto:research@deezer.com)
 Consider citing our paper if you use our method in your own work:
 
 ```BibTeX
-@article{afchar2022learning,
+@inproceedings{afchar2022learning,
   title={Learning Unsupervised Hierarchies of Audio Concepts},
   author={Afchar, Darius and Hennequin, Romain and Guigue, Vincent},
-  journal={International Society of Music Information Retrieval Conference (ISMIR)},
+  booktitle={International Society of Music Information Retrieval Conference (ISMIR)},
   year={2022}
 }
 ```
