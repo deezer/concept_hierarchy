@@ -28,3 +28,7 @@ Consider citing our paper if you use our method in your own work:
   year={2022}
 }
 ```
+
+## Usage for Mac ARM
+
+Consider install tensorflow-macos and tensorflow-metal instead of tensorflow via pip
