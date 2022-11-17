@@ -14,6 +14,16 @@ Supposedly, we may be able to upload most training data, but due to copyright is
 
 You can access results demos at [research.deezer.com/concept_hierarchy](http://research.deezer.com/concept_hierarchy/), which includes useful interactive visualisations of the obtained graphs, as well as additional figures to help better interpret our (dense) tables of results.
 
+## Usage
+
+If you want to run scripts for this repo you have multiple options :
+
+* Using docker : run ```make docker``` and then execute python code via \
+```poetry run concept_hierarchy/script.py```
+* using poetry : run `````poetry install````` and then execute python code via \
+```poetry run python concept_hierarchy/script.py```
+* using pip : run ```pip install -r requirements.txt``` and then execute using python
+
 ## References
 
 Contact: [research@deezer.com](mailto:research@deezer.com)
@@ -28,7 +38,3 @@ Consider citing our paper if you use our method in your own work:
   year={2022}
 }
 ```
-
-## Usage for Mac ARM
-
-Consider install tensorflow-macos and tensorflow-metal instead of tensorflow via pip

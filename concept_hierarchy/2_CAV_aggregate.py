@@ -7,8 +7,9 @@ We could not upload the trained weight as it is >50MB.
 
 from collections import defaultdict
 from glob import glob
-from tqdm import tqdm
+
 import numpy as np
+from tqdm import tqdm
 
 THRESHOLD_PERF = 0.7  # 70% accuracy
 THRESHOLD_NB_TRACKS = 39

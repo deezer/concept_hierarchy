@@ -6,16 +6,15 @@ authors = ["Deezer Research <<research@deezer.com>", "Darius Afchar <dafchar@dee
 packages = [
     { include = "concept_hierarchy" }
 ]
-readme = "README.md"
 
 [tool.poetry.dependencies]
 python = ">=3.9,<3.10"
-tensorflow = {version = "^2.10.0", markers = "sys_platform == 'linux' or sys_platform == 'win32'"}
+tensorflow = {version = "^2.10.0", markers = "sys_platform != 'darwin'"}
 tensorflow-macos = {version = "^2.10.0", markers = "sys_platform == 'darwin'"}
 tensorflow-metal = {version = "^0.6.0", markers = "sys_platform == 'darwin'"}
 tqdm = "^4.64.1"
 networkx = "^2.8.8"
-jupyter ="^1.0.0"
+numpy = "1.21.5"
 
 
 [tool.poetry.group.dev.dependencies]

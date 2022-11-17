@@ -13,7 +13,6 @@ from glob import glob
 
 import numpy as np
 import tensorflow as tf
-
 from data_loader import ImbalancedDataLoader
 from model_cav import CAVPredictor
 from model_musicnn import vgg_keras

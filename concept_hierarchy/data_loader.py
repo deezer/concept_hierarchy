@@ -45,7 +45,7 @@ class ImbalancedDataLoader:
         """Takes a random slice of the spectrogram for data augmentation"""
         cut_index = tf.range(0, tf.shape(x)[0] - INPUT_SIZE[0], INPUT_SIZE[0] // 2)
         split = tf.map_fn(
-            lambda i: x[i: i + INPUT_SIZE[0]],
+            lambda i: x[i : i + INPUT_SIZE[0]],
             cut_index,
             fn_output_signature=tf.float32,
         )

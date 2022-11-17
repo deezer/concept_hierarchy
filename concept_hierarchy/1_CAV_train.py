@@ -15,7 +15,6 @@ from glob import glob
 
 import numpy as np
 import tensorflow as tf
-
 from data_loader import ImbalancedDataLoader
 from model_cav import CAVRegressor
 from model_musicnn import vgg_keras
@@ -65,8 +64,12 @@ class SubSaver(tf.keras.callbacks.Callback):
 if __name__ == "__main__":
 
     parser = argparse.ArgumentParser()
-    parser.add_argument("--start", help="start index for the script", type=int, default=0)
-    parser.add_argument("--stop", help="stop index for the script", type=int, default=-1)
+    parser.add_argument(
+        "--start", help="start index for the script", type=int, default=0
+    )
+    parser.add_argument(
+        "--stop", help="stop index for the script", type=int, default=-1
+    )
     parser.add_argument("--step", help="step for the script", type=int, default=1)
     parser.add_argument("--gpu", help="visible gpu", type=int, default=3)
     args = parser.parse_args()
@@ -116,13 +119,13 @@ if __name__ == "__main__":
     stop_index = len(playlist_ids)
     if args.stop != -1:
         stop_index = args.stop
-    target_list = list(playlist_ids)[args.start: stop_index: args.step]
+    target_list = list(playlist_ids)[args.start : stop_index : args.step]
 
     for k, tag in enumerate(target_list):
         tag_formatted = str(tag)
         if (
-                os.path.join(SAVE_DIR, "cav_" + str(tag_formatted) + "_perf.npy")
-                in existing_saves
+            os.path.join(SAVE_DIR, "cav_" + str(tag_formatted) + "_perf.npy")
+            in existing_saves
         ):
             continue
         print("\n\n\n -- Running script for pid ", tag)
@@ -144,7 +147,9 @@ if __name__ == "__main__":
         val_data_it = val_data_it.map(lambda x: (x, constant_gt))
 
         print("Training...")
-        lm = CAVRegressor("cav_" + str(tag_formatted), bottleneck, temporal_pooling=True)
+        lm = CAVRegressor(
+            "cav_" + str(tag_formatted), bottleneck, temporal_pooling=True
+        )
         early_stop = tf.keras.callbacks.EarlyStopping(monitor="val_loss", patience=10)
         reducer = tf.keras.callbacks.ReduceLROnPlateau(
             monitor="val_loss", patience=5, factor=0.1, mode="auto", min_lr=1e-6

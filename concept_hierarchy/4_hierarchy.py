@@ -26,8 +26,15 @@ Implements Heymann and Garcia-Molina (2006)
 """
 
 
-def heymann(graph, similarity, centrality_vec={}, min_sim=0.2, parents_per_node=1, additional_threshold=0.2
-            , max_children_per_node=20):
+def heymann(
+    graph,
+    similarity,
+    centrality_vec={},
+    min_sim=0.2,
+    parents_per_node=1,
+    additional_threshold=0.2,
+    max_children_per_node=20,
+):
     """
     Transforms a graph into a tree hierarchy.
     if centrality is provided, graph will not be used.
@@ -50,7 +57,6 @@ def heymann(graph, similarity, centrality_vec={}, min_sim=0.2, parents_per_node=
 
     heymann_graph = np.zeros((similarity.shape[1] + 1, similarity.shape[1]))  # + root
     count_nodes = defaultdict(int)
-    available_roots = {"<root>"}
     count_nodes["<root>"] = -1e9
 
     for i, (node, v) in tqdm(enumerate(sorted_nodes)):
@@ -165,6 +171,7 @@ def gen_opt_graph(names, emb, use_cosim=True, threshold=0.1, gen_graph=False):
 
 # eval graph with embs
 
+
 def metric_dist(names, emb, graph, use_cosim=True):
     nei_dist = []
     for node, graph_parent in zip(names, graph.T):
@@ -273,13 +280,13 @@ def eval_opt(inclusion, centrality, names):
 
 
 if __name__ == "__main__":
-    playlists = np.load("../data/selected_playlist.npy", allow_pickle=True).item()
+    playlists = np.load("../data/deezer_playlists.npy", allow_pickle=True).item()
 
     # stats_deezer, stats_genre_apm, stats_mood_apm
-    stat_dict = np.load("../data/stats_deezer.npy", allow_pickle=True).item()
+    stat_dict = np.load("../results/stats_deezer.npy", allow_pickle=True).item()
 
-    training_names = np.load("../data/deezer_cav.npy", allow_pickle=True)[2]
-
+    training_names = np.load("../deezer_cav.npy", allow_pickle=True)[2]
+    # training_names = list(playlists.keys())
     names = []
     last_pid = -1
     filtered_idx = []
@@ -300,7 +307,9 @@ if __name__ == "__main__":
     S = np.zeros((len(names), len(names)))
     for i, k in enumerate(names):
         layer_tag = f"{k}_{studied_pooling_layer}"
-        S[i, :] = stat_dict[layer_tag][f"e{act}x"][filtered_idx] / stat_dict[layer_tag]["n"]
+        S[i, :] = (
+            stat_dict[layer_tag][f"e{act}x"][filtered_idx] / stat_dict[layer_tag]["n"]
+        )
 
     similarity, adjacency = gen_sim_graph(S, 0.5)
     print(
@@ -321,18 +330,20 @@ if __name__ == "__main__":
 
     ## precompute and store centrality  (~20min for Deezer)
 
-    print("computing centrality...")
-    start_time = time()
-    centrality_vec = nx.centrality.betweenness_centrality(graph)
-    print("took", time() - start_time, "seconds")
-    np.save("../results/centrality_deezer.npy", centrality_vec)
-    del centrality_vec
+    # print("computing centrality...")
+    # start_time = time()
+    # centrality_vec = nx.centrality.betweenness_centrality(graph)
+    # print("took", time() - start_time, "seconds")
+    # np.save("../results/centrality_deezer.npy", centrality_vec)
+    # del centrality_vec
 
     # ------------------------------------------------------------------------------------------------------------------
     # Hierarchy Heymann
 
     # heymann_graph = heymann(graph, similarity, parents_per_node = 1 )
-    deezer_centrality_vec = np.load("../results/centrality_deezer.npy", allow_pickle=True).item()
+    deezer_centrality_vec = np.load(
+        "../results/centrality_deezer.npy", allow_pickle=True
+    ).item()
     heymann_graph = heymann({}, similarity, deezer_centrality_vec, parents_per_node=1)
 
     # ------------------------------------------------------------------------------------------------------------------
@@ -347,7 +358,9 @@ if __name__ == "__main__":
     llm_centrality_vec = nx.centrality.betweenness_centrality(sim_llm_graph)
 
     # USG
-    emb_usg = np.load("../results/emb_collaborative_filtering.npy", allow_pickle=True).item()
+    emb_usg = np.load(
+        "../results/emb_collaborative_filtering.npy", allow_pickle=True
+    ).item()
     names_usageemb = list(set(emb_usg.keys()) & set(names))
     usg_intersect, usg_similarity, sim_usg_graph = gen_opt_graph(
         names_usageemb, emb_usg, use_cosim=False, threshold=-0.8, gen_graph=True
@@ -388,58 +401,68 @@ if __name__ == "__main__":
 
     latex_script = ""
     latex_script += (
-            "$H$"
-            + eval_unsupervised_audio(S, names, centrality_vec=deezer_centrality_vec)
-            + " \\\\ \n"
+        "$H$"
+        + eval_unsupervised_audio(S, names, centrality_vec=deezer_centrality_vec)
+        + " \\\\ \n"
     )
 
     latex_script += "\n\\hline \n"
     latex_script += (
-            "$H_\\textrm{CF}$"
-            + eval_opt(usg_similarity, usg_centrality_vec, names_usageemb)
-            + " \\\\ \n"
+        "$H_\\textrm{CF}$"
+        + eval_opt(usg_similarity, usg_centrality_vec, names_usageemb)
+        + " \\\\ \n"
     )
     latex_script += (
-            "$H_\\textrm{BERT}$"
-            + eval_opt(llm_similarity, llm_centrality_vec, names_llm)
-            + " \\\\ \n"
+        "$H_\\textrm{BERT}$"
+        + eval_opt(llm_similarity, llm_centrality_vec, names_llm)
+        + " \\\\ \n"
     )
     latex_script += (
-            "$H_\\textrm{W2V-1}$"
-            + eval_opt(mwon_similarity, mwon_centrality_vec, names_w2v_mwon)
-            + " \\\\ \n"
+        "$H_\\textrm{W2V-1}$"
+        + eval_opt(mwon_similarity, mwon_centrality_vec, names_w2v_mwon)
+        + " \\\\ \n"
     )
     latex_script += (
-            "$H_\\textrm{W2V-2}$"
-            + eval_opt(sdoh_similarity, sdoh_centrality_vec, names_w2v_sdoh)
-            + " \\\\"
+        "$H_\\textrm{W2V-2}$"
+        + eval_opt(sdoh_similarity, sdoh_centrality_vec, names_w2v_sdoh)
+        + " \\\\"
     )
 
     latex_script += "\n\\hline \n"
     latex_script += (
-            "Random (Top)"
-            + eval_unsupervised_audio(S, names, hierarchy=False, centrality_vec=deezer_centrality_vec, baseline=0)
-            + " \\\\ \n"
+        "Random (Top)"
+        + eval_unsupervised_audio(
+            S, names, hierarchy=False, centrality_vec=deezer_centrality_vec, baseline=0
+        )
+        + " \\\\ \n"
     )
     latex_script += (
-            "Random (Sim)"
-            + eval_unsupervised_audio(S, names, hierarchy=False, centrality_vec=deezer_centrality_vec, baseline=3)
-            + " \\\\ \n"
+        "Random (Sim)"
+        + eval_unsupervised_audio(
+            S, names, hierarchy=False, centrality_vec=deezer_centrality_vec, baseline=3
+        )
+        + " \\\\ \n"
     )
     latex_script += (
-            "Similarity"
-            + eval_unsupervised_audio(S, names, hierarchy=False, centrality_vec=deezer_centrality_vec)
-            + " \\\\ \n"
+        "Similarity"
+        + eval_unsupervised_audio(
+            S, names, hierarchy=False, centrality_vec=deezer_centrality_vec
+        )
+        + " \\\\ \n"
     )
     latex_script += (
-            "Matching"
-            + eval_unsupervised_audio(S, names, hierarchy=False, centrality_vec=deezer_centrality_vec, baseline=1)
-            + " \\\\ \n"
+        "Matching"
+        + eval_unsupervised_audio(
+            S, names, hierarchy=False, centrality_vec=deezer_centrality_vec, baseline=1
+        )
+        + " \\\\ \n"
     )
     latex_script += (
-            "Top-1"
-            + eval_unsupervised_audio(S, names, hierarchy=False, centrality_vec=deezer_centrality_vec, baseline=2)
-            + " \\\\ \n"
+        "Top-1"
+        + eval_unsupervised_audio(
+            S, names, hierarchy=False, centrality_vec=deezer_centrality_vec, baseline=2
+        )
+        + " \\\\ \n"
     )
     latex_script += "\n\\hline \n"
 

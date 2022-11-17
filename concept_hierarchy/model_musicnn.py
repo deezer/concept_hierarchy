@@ -14,7 +14,6 @@ from tensorflow.keras.layers import (
     MaxPool2D,
 )
 
-
 # CONSTANTS
 INPUT_SIZE = (187, 96)
 OUTPUT_SIZE = 50
@@ -101,6 +100,5 @@ def network(x, num_filters):
 
     bn_conv5 = BatchNormalization(axis=-1, name="bn_conv5")(conv5)
     pool5 = MaxPool2D(pool_size=[4, 4], strides=[4, 4], name="pool5")(bn_conv5)
-    
+
     return pool1, pool2, pool3, pool4, pool5
-    
