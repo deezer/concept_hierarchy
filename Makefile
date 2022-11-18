@@ -17,20 +17,11 @@ clean:
 	poetry run black $(CODE_DIRECTORY)
 	poetry run isort $(CODE_DIRECTORY)
 
-train:
-	poetry run python 1_CAV_train.py
-
-aggregate:
-	poetry run python 2_CAV_aggregate.py
-
-compute_projection:
-	poetry run python 3_compute_projections.py
-
-hirerarchy:
-	poetry run python 4_hierarchy.py
-
 docker:
+ifndef SCRIPT
+	@printf "\n script name needed (e.g SCRIPT=1_CAV_train) !\n\n"
+	exit 1
+endif
+
 	docker build . -t concept_hierarchy
-	docker run -ti --rm -v data:/data -v results:/results -v weights:/weights concept_hierarchy bash
-
-
+	docker run -ti -v data:/data -v results:/results -v weights:/weights concept_hierarchy sh -c "poetry run python concept_hierarchy/${SCRIPT}.py"

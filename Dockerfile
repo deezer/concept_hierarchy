@@ -7,6 +7,3 @@ COPY poetry.lock .
 COPY pyproject.toml .
 
 RUN poetry install --no-root --only main
-RUN poetry run pip install tensorflow=="2.10.0"
-
-ENTRYPOINT /bin/bash

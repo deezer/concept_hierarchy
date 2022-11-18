@@ -562,49 +562,6 @@ tensorflow-gpu = ["tensorflow-gpu (>=2.10.0,<2.11.0)"]
 tensorflow-rocm = ["tensorflow-rocm (>=2.10.0,<2.11.0)"]
 
 [[package]]
-name = "tensorflow-macos"
-version = "2.10.0"
-description = "TensorFlow is an open source machine learning framework for everyone."
-category = "main"
-optional = false
-python-versions = ">=3.7"
-
-[package.dependencies]
-absl-py = ">=1.0.0"
-astunparse = ">=1.6.0"
-flatbuffers = ">=2.0"
-gast = ">=0.2.1,<=0.4.0"
-google-pasta = ">=0.1.1"
-grpcio = ">=1.24.3,<2.0"
-h5py = ">=2.9.0"
-keras = ">=2.10.0,<2.11"
-keras-preprocessing = ">=1.1.1"
-libclang = ">=13.0.0"
-numpy = ">=1.20"
-opt-einsum = ">=2.3.2"
-packaging = "*"
-protobuf = ">=3.9.2,<3.20"
-setuptools = "*"
-six = ">=1.12.0"
-tensorboard = ">=2.10,<2.11"
-tensorflow-estimator = ">=2.10.0,<2.11"
-termcolor = ">=1.1.0"
-typing-extensions = ">=3.6.6"
-wrapt = ">=1.11.0"
-
-[[package]]
-name = "tensorflow-metal"
-version = "0.6.0"
-description = "TensorFlow acceleration for Mac GPUs."
-category = "main"
-optional = false
-python-versions = "*"
-
-[package.dependencies]
-six = ">=1.15.0"
-wheel = ">=0.35,<1.0"
-
-[[package]]
 name = "termcolor"
 version = "2.1.0"
 description = "ANSI color formatting for output in terminal"
@@ -709,7 +666,7 @@ testing = ["flake8 (<5)", "func-timeout", "jaraco.functools", "jaraco.itertools"
 [metadata]
 lock-version = "1.1"
 python-versions = ">=3.9,<3.10"
-content-hash = "5d8fea5c4ff5ff20154d1332dd5c20dcc8179b33cbaf8f269d92a40cd92e5035"
+content-hash = "a7280f5f85583caabc2d447190e044f68bf5f08eb607af4fc3974c8da7fd6ff0"
 
 [metadata.files]
 absl-py = [
@@ -1102,22 +1059,6 @@ tensorflow-io-gcs-filesystem = [
     {file = "tensorflow_io_gcs_filesystem-0.27.0-cp39-cp39-manylinux_2_12_x86_64.manylinux2010_x86_64.whl", hash = "sha256:ed17c281a28df9ab0547cdf166e885208d2a43db0f0f8fbe66addc4e23ee36ff"},
     {file = "tensorflow_io_gcs_filesystem-0.27.0-cp39-cp39-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:8d2c01ba916866204b70f96103bbaa24655b1e7b416b399e49dce893a7835aa7"},
     {file = "tensorflow_io_gcs_filesystem-0.27.0-cp39-cp39-win_amd64.whl", hash = "sha256:152f4c20e5341d486df35f7ce9751a441ed89b43c1036491cd2b30a742fbe20a"},
-]
-tensorflow-macos = [
-    {file = "tensorflow_macos-2.10.0-cp310-cp310-macosx_12_0_arm64.whl", hash = "sha256:dfd1dd478b3ae01e8d578c38083bef68bc838ceaa05a813b6788fe9e6ec19140"},
-    {file = "tensorflow_macos-2.10.0-cp310-cp310-macosx_12_0_x86_64.whl", hash = "sha256:aa074b5442d3411e5416c5112531d8b78a8c469ca92fa41c0e0cf14428608bf3"},
-    {file = "tensorflow_macos-2.10.0-cp38-cp38-macosx_12_0_arm64.whl", hash = "sha256:e15ab56f39f3d2e7c07a72a5969f025e259b1d3fcb9c3f7217f17b62581c33a8"},
-    {file = "tensorflow_macos-2.10.0-cp38-cp38-macosx_12_0_x86_64.whl", hash = "sha256:00be07ffcf8b6288fa3dd9a27a3b6dd0f6c85af5c3109451a1b7e720bb817d14"},
-    {file = "tensorflow_macos-2.10.0-cp39-cp39-macosx_12_0_arm64.whl", hash = "sha256:f2ec603c5496c25fb1bcda8eb4166423bf023bfb7ae6cbdec0be8796ca67e866"},
-    {file = "tensorflow_macos-2.10.0-cp39-cp39-macosx_12_0_x86_64.whl", hash = "sha256:3177a8a97149f78748eeb20009aa3dc27ae2c112ab6380886ec8620bbcb70f19"},
-]
-tensorflow-metal = [
-    {file = "tensorflow_metal-0.6.0-cp310-cp310-macosx_12_0_arm64.whl", hash = "sha256:181e2c1c95c0baf4b76f256d418593a4f44c2a9aa47fbcee64b6a4fdd33eeff7"},
-    {file = "tensorflow_metal-0.6.0-cp310-cp310-macosx_12_0_x86_64.whl", hash = "sha256:ad500971b2270479367b53caf3704470cbd22cb8b5ef7cfb01b54533f63d4895"},
-    {file = "tensorflow_metal-0.6.0-cp38-cp38-macosx_12_0_arm64.whl", hash = "sha256:ad4cd72c9cd69bf377d2e15a3a3ddee62b3a79dab6ae65838c0e5cdec627bcf5"},
-    {file = "tensorflow_metal-0.6.0-cp38-cp38-macosx_12_0_x86_64.whl", hash = "sha256:f7da1c286920ea7c9110a8175c427d249267bbe5a7ca0125928c3bc0cd3a3fc2"},
-    {file = "tensorflow_metal-0.6.0-cp39-cp39-macosx_12_0_arm64.whl", hash = "sha256:1ee3adca0562513443069804f3a637e381cedd2b665336e6964e6da0310f7a73"},
-    {file = "tensorflow_metal-0.6.0-cp39-cp39-macosx_12_0_x86_64.whl", hash = "sha256:b08330194278bb9da96ab386614d252ff867cf7223e9c401a5e52213f00f6381"},
 ]
 termcolor = [
     {file = "termcolor-2.1.0-py3-none-any.whl", hash = "sha256:91dd04fdf661b89d7169cefd35f609b19ca931eb033687eaa647cef1ff177c49"},
