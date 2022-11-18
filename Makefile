@@ -24,4 +24,4 @@ ifndef SCRIPT
 endif
 
 	docker build . -t concept_hierarchy
-	docker run -ti -v data:/data -v results:/results -v weights:/weights concept_hierarchy sh -c "poetry run python concept_hierarchy/${SCRIPT}.py"
+	docker run -ti -v data:/data -v results:/results -v weights:/weights concept_hierarchy sh -c "poetry run python concept_hierarchy/${SCRIPT}"

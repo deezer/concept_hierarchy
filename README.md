@@ -18,7 +18,7 @@ You can access results demos at [research.deezer.com/concept_hierarchy](http://r
 
 If you want to run scripts for this repo you have multiple options :
 
-* Using docker : run ```make docker SCRIPT=concept_hierarchy/script.py``` 
+* Using docker : run ```make docker SCRIPT=1_CAV_train.py``` 
 * using poetry : run `````poetry install````` and then execute python code via \
 ```poetry run python concept_hierarchy/script.py```
 * using pip : run ```pip install -r requirements.txt``` and then execute using python
