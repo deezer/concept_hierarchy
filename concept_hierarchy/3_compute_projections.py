@@ -1,5 +1,5 @@
 """
-Compute projections on deezer learnt CAVs for similarity estimations.
+Compute projections of learnt CAVs for similarity estimations.
 
 NOTE:
 We do not upload the resulting file for the Deezer dataset, it's 1.5Go, we will
@@ -20,7 +20,7 @@ from model_musicnn import vgg_keras
 DATA_PATH = "data/deezer_mels_tensors"
 PLAYLIST_PATH = "data/deezer_playlist.npy"
 EMBEDDER_WEIGHT_PATH = "../weights/MSD_vgg.h5"
-CAV_WEIGHT_PATH = "weights/learned_deezer_cav.npy"
+CAV_WEIGHT_PATH = "weights/deezer_cav.npy"
 
 if __name__ == "__main__":
 
@@ -41,7 +41,7 @@ if __name__ == "__main__":
     # -----------------------------------------------------------------------------------------------------------------
 
     predictor = CAVPredictor(
-        bottleneck, CAV_WEIGHT_PATH, temporal_pooling=True, activation=False
+        bottleneck, CAV_WEIGHT_PATH, temporal_pooling=True, activation=False   # outputs without applying sigmoid
     )
 
     # Open dataset
@@ -64,10 +64,10 @@ if __name__ == "__main__":
 
     stats = defaultdict(
         lambda: {
-            "ex": np.zeros(len(predictor.labels)),
-            "ex2": np.zeros(len(predictor.labels)),
-            "esigx": np.zeros(len(predictor.labels)),
-            "esigx2": np.zeros(len(predictor.labels)),
+            "ex": np.zeros(len(predictor.labels)),  # expectation: \mathbb{E}[X]
+            "ex2": np.zeros(len(predictor.labels)),  # \mathbb{E}[X^2]
+            "esigx": np.zeros(len(predictor.labels)),  # \mathbb{E}[\sigma(X)]
+            "esigx2": np.zeros(len(predictor.labels)),  # \mathbb{E}[\sigma(X)^2]
             "n": 0,
         }
     )

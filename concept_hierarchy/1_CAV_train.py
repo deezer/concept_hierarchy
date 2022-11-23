@@ -1,8 +1,9 @@
 """
-Training code of the CAV regressors
+Training code of the CAV regressors. Can be run in parallel on several GPUs by using the `start`, `end`, `step`
+and `gpu` args. This typically took a week to complete on 4 parallel GPUs because there is a lot of playlists and tracks.
 
 NOTE:
-The `deezer_mels_tensors` dataset will be provided after review,
+The `deezer_mels_tensors` dataset will be provided after the reviews,
 probably with a workaround due to copyright (and size) issues: e.g., only
 uploading spectrograms embedded in the backbone.
 """
@@ -90,7 +91,7 @@ if __name__ == "__main__":
 
     print("loading audio paths")
     path_set = glob(os.path.join(DATA_PATH, "**/*.tensor"))
-    print("\nFound {} paths\n".format(len(path_set)))
+    print("\nFound {} music track paths\n".format(len(path_set)))
 
     data_loader = ImbalancedDataLoader(
         {

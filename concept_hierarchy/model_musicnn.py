@@ -38,23 +38,27 @@ def vgg_keras(num_filters=128, return_feature_model=False):
     if not return_feature_model:
         return model
 
-    # I figured the two first layer may be too noisy and big and inefficient anyway
+    # I saw that the two first layer are very noisy and big and inefficient, so I skip them
     features = tf.keras.Model(x, [pool3, pool4, pool5, output])
     return model, features
 
 
 def var_vgg_keras(num_filters=128, output_layers=(1 << 5) - 1):
-    """The same but allowing to have input of any size."""
+    """
+    The same but allowing to embed inputs of any size.
+
+    output_layers: binary representation of the set of needed features.
+        eg. if you need [pool3, pool5] you input in binary 00000 thus 9 in decimal.
+    """
     x = Input((None,) + INPUT_SIZE[1:])
 
-    pool1, pool2, pool3, pool4, pool5 = network(x, num_filters)
-
-    pooling_layers = [pool1, pool2, pool3, pool4, pool5]
+    pooling_layers = network(x, num_filters)
     needed_layers = []
     for i, l in enumerate(pooling_layers):
         if (1 << i) & output_layers > 0:
             needed_layers.append(l)
-    print(needed_layers)
+
+    print("Embedding layers:", needed_layers)
     model = tf.keras.Model(x, needed_layers)
 
     return model

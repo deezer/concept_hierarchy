@@ -19,13 +19,6 @@ def gen_sim_graph(S, threshold=0.5):
     return similarity, adjacency
 
 
-"""
-Implements Heymann and Garcia-Molina (2006)
-
-... and extended to handle top K.
-"""
-
-
 def heymann(
     graph,
     similarity,
@@ -36,6 +29,8 @@ def heymann(
     max_children_per_node=20,
 ):
     """
+    Implements Garcia-Molina, and free extension to handle multi-link. To use for your future work.
+
     Transforms a graph into a tree hierarchy.
     if centrality is provided, graph will not be used.
 
@@ -136,7 +131,7 @@ def gen_opt_graph(names, emb, use_cosim=True, threshold=0.1, gen_graph=False):
     """
     I don't know what to do exactly as it's not build on CAVs. I will do very generically:
     - threshold sim to add base graph
-    - add top1 by default to avoid unconnected nodes
+    - add top1 by default to avoid unconnected nodes and have a fairer competition
     """
     E = np.stack([emb[pid] for pid in names], 0)
     if use_cosim:
@@ -385,7 +380,7 @@ if __name__ == "__main__":
 
     # Audio
     weights_np, biases_np, names_cav = np.load(
-        "weights/learned_deezer_cav.npy", allow_pickle=True
+        "weights/deezer_cav.npy", allow_pickle=True
     )
     emb_music_tensor = np.concatenate((weights_np[2], biases_np[2]), 0).T
     emb_music = {}

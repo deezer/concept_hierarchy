@@ -1,8 +1,8 @@
 """
-Open trained CAV files, sort, combine and create final weight file.
+Open trained CAV files, sort, combine and create final weight .npy file to be later used.
 
-NOTE:
-We could not upload the trained weight as it is >50MB.
+Note: To avoid duplicates, we provide the resulting files in `weights/deezer_cav.npy`, `apm_genres_cav.npy`
+and `apm_moods_cav.npy`. This code is just a reference for curious readers and for reproducibility.
 """
 
 from collections import defaultdict
@@ -22,7 +22,7 @@ playlists_path = "data/deezer_playlists.npy"
 playlists = np.load(playlists_path, allow_pickle=True).item()
 
 if __name__ == "__main__":
-    # filter
+    # Filter bad cavs and bad playlists, because things always go wrong with data exports. :,(
 
     filtered_cav_1 = set()
     for p_id in playlists:
@@ -39,7 +39,7 @@ if __name__ == "__main__":
         if p_id not in filtered_cav_1:
             continue
         perf = np.load(perf_file)
-        cav_perfs[p_id] = perf[-4 + SELECTED_LAYER]
+        cav_perfs[p_id] = perf[-4 + SELECTED_LAYER]  # tf.model.evaluate() returns the losses than the accuracies, hence -4
         if cav_perfs[p_id] > THRESHOLD_PERF:
             filtered_cav_2.add(p_id)
         else:
@@ -47,7 +47,7 @@ if __name__ == "__main__":
 
     print(f"Final selection of {len(filtered_cav_2)} cavs")
 
-    # assemble
+    # Assemble elite cavs
 
     weights = defaultdict(list)
     biases = defaultdict(list)
@@ -71,4 +71,4 @@ if __name__ == "__main__":
         weights_np[cav] = np.concatenate(weights[cav], axis=-1)
         biases_np[cav] = np.stack(biases[cav], axis=1)
 
-    np.save("weights/learned_deezer_CAV", (weights_np, biases_np, names))
+    np.save("weights/deezer_CAV", (weights_np, biases_np, names))

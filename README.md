@@ -22,7 +22,8 @@ If you want to run scripts for this repo you have multiple options :
 * using poetry : run `````poetry install````` and then execute python code via \
 ```poetry run python concept_hierarchy/script.py```
 
-# Usage for macOS ARM
+*Usage for macOS ARM*
+
 See https://developer.apple.com/metal/tensorflow-plugin/
 
 ## References

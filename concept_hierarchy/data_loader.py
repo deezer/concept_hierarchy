@@ -8,8 +8,12 @@ class ImbalancedDataLoader:
 
     def __init__(self, params):
         """
-        pos_examples_list: list of audio with the positive label we are interested
-        in learning, the rest of negatives is sampled uniformly.
+        params: {
+            "batch_size"
+            "repeat": repeat a track several time in consecutive batches (with random cut of the audio)
+            "seed"<int>: for reproducibility
+            "song_set": set of all available music track paths
+        }
         """
         self.params = {
             "batch_size": 64,
@@ -42,7 +46,7 @@ class ImbalancedDataLoader:
     @staticmethod
     @tf.function
     def slice_along_audio(x):
-        """Takes a random slice of the spectrogram for data augmentation"""
+        """Takes consecutive slices along the spectrogram for data augmentation"""
         cut_index = tf.range(0, tf.shape(x)[0] - INPUT_SIZE[0], INPUT_SIZE[0] // 2)
         split = tf.map_fn(
             lambda i: x[i : i + INPUT_SIZE[0]],
@@ -50,11 +54,6 @@ class ImbalancedDataLoader:
             fn_output_signature=tf.float32,
         )
         return tf.stack(split)
-
-    @staticmethod
-    @tf.function
-    def multi_hot(x, depth):
-        return tf.reduce_max(tf.one_hot(x, depth), axis=0)
 
     @tf.function
     def open_audio(self, f_name):
@@ -64,9 +63,12 @@ class ImbalancedDataLoader:
         return audio
 
     def create_training_splits(self, pos_list, val_split=0.1, test_split=0.2):
+        """Splits the positive song set (ie. playlist tracklist) in train, validation and test
+        pos_list: list of paths to be used as positive samples
+        """
         np.random.seed(self.params["seed"])  # same shuffle for train / test
         loc_pos_list = np.copy(pos_list)
-        neg_list = list(set(self.params["song_set"]) - set(pos_list))
+        neg_list = list(set(self.params["song_set"]) - set(pos_list))  # future work: better negative samples?
 
         np.random.shuffle(loc_pos_list)
         np.random.shuffle(neg_list)
@@ -114,7 +116,7 @@ class ImbalancedDataLoader:
         neg_ds = self.open_batch(neg_ds)
 
         ds = tf.data.Dataset.zip((pos_ds, neg_ds))
-        ds = ds.map(lambda x, y: tf.concat((x, y), axis=0))
+        ds = ds.map(lambda x, y: tf.concat((x, y), axis=0))  # note: rebalanced training between positives and negative
         return ds
 
     def open_batch(self, ds_):
@@ -124,12 +126,12 @@ class ImbalancedDataLoader:
         )
 
         ds_ = ds_.map(self.random_audio_slice)
-        ds_ = ds_.shuffle(self.params["repeat"] * self.params["batch_size"] * 5)
-        ds_ = ds_.batch(self.params["batch_size"] // 2)
+        ds_ = ds_.shuffle(self.params["repeat"] * self.params["batch_size"] * 5)  # tune me if your memory crashes
+        ds_ = ds_.batch(self.params["batch_size"] // 2)  # //2 to account for pos and neg
         return ds_
 
     def create_reader_tf_iterator(self, mode="train", val_split=0.1, test_split=0.2):
-        """No label, just sample music audio."""
+        """No label, just read all music audio."""
         np.random.seed(self.params["seed"])
         song_list = list(self.params["song_set"])
         np.random.shuffle(song_list)
@@ -143,7 +145,7 @@ class ImbalancedDataLoader:
         elif mode == "test":
             target_song = song_list[test_split_index:]
         else:
-            raise ValueError("Something is broken with the arg `mode` :", mode)
+            raise ValueError("arg `mode` should be ['train', 'val', 'test']:", mode)
 
         ds = tf.data.Dataset.from_tensor_slices(target_song)
         ds2 = ds.map(self.open_audio)
@@ -157,7 +159,7 @@ class ImbalancedDataLoader:
         return ds
 
     def create_reader_from_set_tf_iterator(self, song_set):
-        """given predefined split song set, do stuff"""
+        """given predefined split for a specific song set"""
         ds = tf.data.Dataset.from_tensor_slices(song_set)
         ds = ds.map(self.open_audio)
         ds = ds.map(self.slice_along_audio)

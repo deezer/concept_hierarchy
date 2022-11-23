@@ -78,7 +78,7 @@ class CAVPredictor:
     """
 
     def __init__(
-        self, embedder, wpath, temporal_pooling=False, activation=True, name=""
+        self, embedder, wpath, temporal_pooling=False, activation=True, name="CAV_Predictor"
     ):
         self.model = None
         self.lm_layers = None
