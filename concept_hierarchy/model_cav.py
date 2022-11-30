@@ -8,8 +8,7 @@ from tensorflow.keras.layers import Dense, Dropout, Flatten, Input, Lambda
 from tensorflow.keras.models import Model
 from tensorflow.keras.optimizers import Adam
 
-INPUT_SIZE = (187, 96)
-AUDIO_SHAPE = (7501, 96)
+INPUT_SIZE = (1, 128) # (187, 96)
 
 
 class CAVRegressor:
@@ -17,11 +16,11 @@ class CAVRegressor:
     This is solely used to train a single regressor and learn a CAV.
     """
 
-    def __init__(self, name, embedder, temporal_pooling=False):
+    def __init__(self, name, temporal_pooling=False):
         self.model = None
         self.lm_layers = None
         self.name = name
-        self.build(embedder, temporal_pooling)
+        self.build(temporal_pooling)
 
     @staticmethod
     def build_single_pipe(f, name=""):
@@ -37,10 +36,10 @@ class CAVRegressor:
         y = layer(g)
         return y, layer
 
-    def build(self, embedder, temporal_pooling):
+    def build(self, temporal_pooling):
         """embedder is all features"""
         x = Input(INPUT_SIZE)
-        f = embedder(x, training=False)  # -> list of tensors
+        f = x  # used to be were the embedder was
         if not isinstance(f, list):
             f = [f]  # manage the case of single embedding layer
 

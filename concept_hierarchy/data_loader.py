@@ -47,7 +47,7 @@ class ImbalancedDataLoader:
     @tf.function
     def slice_along_audio(x):
         """Takes consecutive slices along the spectrogram for data augmentation"""
-        cut_index = tf.range(0, tf.shape(x)[0] - INPUT_SIZE[0], INPUT_SIZE[0] // 2)
+        cut_index = tf.range(0, 1 + tf.shape(x)[0] - INPUT_SIZE[0], 1 + INPUT_SIZE[0] // 2)
         split = tf.map_fn(
             lambda i: x[i : i + INPUT_SIZE[0]],
             cut_index,
@@ -59,7 +59,6 @@ class ImbalancedDataLoader:
     def open_audio(self, f_name):
         audio = tf.io.read_file(f_name)
         audio = tf.io.parse_tensor(audio, tf.float32)
-        audio = self.pad_small(audio)  # let's include that in the .map
         return audio
 
     def create_training_splits(self, pos_list, val_split=0.1, test_split=0.2):

@@ -18,12 +18,10 @@ import numpy as np
 import tensorflow as tf
 from data_loader import ImbalancedDataLoader
 from model_cav import CAVRegressor
-from model_musicnn import vgg_keras
 
-DATA_PATH = "data/deezer_mels_tensors"  # unavailable, 30s music dataset
-PLAYLIST_PATH = "data/deezer_playlists.npy"
-EMBEDDER_WEIGHT_PATH = "../weights/MSD_vgg.h5"
-SAVE_DIR = "CAV"
+DATA_PATH = "../../dataset_ISMIR/deezer_anonymised_tracks"
+PLAYLIST_PATH = "../../dataset_ISMIR/deezer_playlists.npy"
+SAVE_DIR = "../CAV"
 BS = 128  # training batch size
 
 
@@ -63,7 +61,6 @@ class SubSaver(tf.keras.callbacks.Callback):
 
 
 if __name__ == "__main__":
-
     parser = argparse.ArgumentParser()
     parser.add_argument(
         "--start", help="start index for the script", type=int, default=0
@@ -78,11 +75,6 @@ if __name__ == "__main__":
     # Config GPUs
     os.environ["CUDA_VISIBLE_DEVICES"] = str(args.gpu)
 
-    # Load embedder
-    vgg, bottleneck = vgg_keras(128, return_feature_model=True)
-    vgg.load_weights(EMBEDDER_WEIGHT_PATH)
-    vgg.trainable = False
-    bottleneck.trainable = False
 
     # Open dataset
     print("opening tags")
@@ -103,7 +95,7 @@ if __name__ == "__main__":
 
     song_2_path = {}
     for path in path_set:
-        song_id = int(path.split("/")[-1].split(".")[0])
+        song_id = path.split("/")[-1].split(".")[0]
         song_2_path[song_id] = path
 
     constant_gt = tf.concat(
@@ -111,7 +103,7 @@ if __name__ == "__main__":
     )
     constant_gt = tf.expand_dims(constant_gt, -1)
 
-    # Train loop--------------------------------------------------------------------------------------------------------
+    # Train loop------------------------
 
     existing_saves = glob(os.path.join(SAVE_DIR, "*_perf.npy"))
     start_time = time.time()
@@ -124,10 +116,7 @@ if __name__ == "__main__":
 
     for k, tag in enumerate(target_list):
         tag_formatted = str(tag)
-        if (
-            os.path.join(SAVE_DIR, "cav_" + str(tag_formatted) + "_perf.npy")
-            in existing_saves
-        ):
+        if (os.path.join(SAVE_DIR, "cav_" + str(tag_formatted) + "_perf.npy") in existing_saves):
             continue
         print("\n\n\n -- Running script for pid ", tag)
 
@@ -142,21 +131,19 @@ if __name__ == "__main__":
         gc.collect()
 
         songs_split = data_loader.create_training_splits(pos_path_list)
-        data_it = data_loader.create_tf_iterator(songs_split["train"], "train")
+        data_it = data_loader.create_tf_iterator(songs_split["train"])
         data_it = data_it.map(lambda x: (x, constant_gt))
-        val_data_it = data_loader.create_tf_iterator(songs_split["val"], "val")
+        val_data_it = data_loader.create_tf_iterator(songs_split["val"])
         val_data_it = val_data_it.map(lambda x: (x, constant_gt))
 
         print("Training...")
-        lm = CAVRegressor(
-            "cav_" + str(tag_formatted), bottleneck, temporal_pooling=True
-        )
-        early_stop = tf.keras.callbacks.EarlyStopping(monitor="val_loss", patience=10)
+        lm = CAVRegressor("cav_" + str(tag_formatted), temporal_pooling=True)
+        early_stop = tf.keras.callbacks.EarlyStopping(monitor="val_loss", patience=20)
         reducer = tf.keras.callbacks.ReduceLROnPlateau(
-            monitor="val_loss", patience=5, factor=0.1, mode="auto", min_lr=1e-6
+            monitor="val_loss", patience=10, factor=0.1, mode="auto", min_lr=1e-6
         )
         saver = SubSaver(
-            len(bottleneck.output),
+            1,
             SAVE_DIR,
             monitor="val_loss",
             target_tag=tag_formatted,
@@ -175,7 +162,7 @@ if __name__ == "__main__":
         print("Now evaluating...")
         del data_it
         del val_data_it
-        test_data_it = data_loader.create_tf_iterator(songs_split["test"], "test")
+        test_data_it = data_loader.create_tf_iterator(songs_split["test"])
         test_data_it = test_data_it.map(lambda x: (x, constant_gt))
 
         perfs = lm.model.evaluate(test_data_it, steps=200, verbose=0)
