@@ -77,7 +77,7 @@ class CAVPredictor:
     """
 
     def __init__(
-        self, embedder, wpath, temporal_pooling=False, activation=True, name="CAV_Predictor"
+        self, wpath, temporal_pooling=False, activation=True, name="CAV_Predictor"
     ):
         self.model = None
         self.lm_layers = None
@@ -85,11 +85,11 @@ class CAVPredictor:
         self.weights, self.biases, self.labels = np.load(wpath, allow_pickle=True)
         self.cav_keys = list(self.biases.keys())
         self.n_cav = self.biases[self.cav_keys[0]].shape[1]  # output size
-        self.build(embedder, activation, temporal_pooling)
+        self.build(activation, temporal_pooling)
 
-    def build(self, embedder, activation, temporal_pooling):
+    def build(self, activation, temporal_pooling):
         x = Input(INPUT_SIZE)
-        f = embedder(x, training=False)  # -> list of tensors
+        f = x
         lms = []
         output = []
         layer_ac = "linear"

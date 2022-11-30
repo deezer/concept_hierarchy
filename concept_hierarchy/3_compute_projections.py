@@ -15,12 +15,10 @@ import numpy as np
 import tensorflow as tf
 from data_loader import ImbalancedDataLoader
 from model_cav import CAVPredictor
-from model_musicnn import vgg_keras
 
-DATA_PATH = "data/deezer_mels_tensors"
-PLAYLIST_PATH = "data/deezer_playlist.npy"
-EMBEDDER_WEIGHT_PATH = "../weights/MSD_vgg.h5"
-CAV_WEIGHT_PATH = "weights/deezer_cav.npy"
+DATA_PATH = "../../dataset_ISMIR/deezer_anonymised_tracks"
+PLAYLIST_PATH = "../../dataset_ISMIR/deezer_playlists.npy"
+CAV_WEIGHT_PATH = "../weights/new_deezer_cav.npy"
 
 if __name__ == "__main__":
 
@@ -31,18 +29,8 @@ if __name__ == "__main__":
     # Config GPUs
     os.environ["CUDA_VISIBLE_DEVICES"] = str(args.gpu)
 
-    # Load embedder
 
-    vgg, bottleneck = vgg_keras(128, return_feature_model=True)
-    vgg.load_weights(EMBEDDER_WEIGHT_PATH)
-    vgg.trainable = False
-    bottleneck.trainable = False
-
-    # -----------------------------------------------------------------------------------------------------------------
-
-    predictor = CAVPredictor(
-        bottleneck, CAV_WEIGHT_PATH, temporal_pooling=True, activation=False   # outputs without applying sigmoid
-    )
+    predictor = CAVPredictor(CAV_WEIGHT_PATH, temporal_pooling=True, activation=False)
 
     # Open dataset
 
@@ -57,7 +45,7 @@ if __name__ == "__main__":
 
     song_2_path = {}
     for path in path_set:
-        song_id = int(path.split("/")[-1].split(".")[0])
+        song_id = path.split("/")[-1].split(".")[0]
         song_2_path[song_id] = path
 
     # Mean, Var estimation loop
@@ -85,20 +73,19 @@ if __name__ == "__main__":
         print("Found", len(test_data_it), "pos test songs for tag", tag)
 
         for X in test_data_it:
-            V = predictor.model.predict(X)  # outputs 0, 1, 2, 3
+            V = predictor.model.predict(X)
             sigV = tf.nn.sigmoid(V).numpy()
-            for pool_layer in range(4):
-                subtag = "{}_{}".format(tag, pool_layer)
-                stats[subtag]["ex"] = stats[subtag]["ex"] + np.mean(V[pool_layer], 0)
-                stats[subtag]["ex2"] = stats[subtag]["ex2"] + np.mean(
-                    np.square(V[pool_layer]), 0
-                )
-                stats[subtag]["esigx"] = stats[subtag]["esigx"] + np.mean(
-                    sigV[pool_layer], 0
-                )
-                stats[subtag]["esigx2"] = stats[subtag]["esigx2"] + np.mean(
-                    np.square(sigV[pool_layer]), 0
-                )
-                stats[subtag]["n"] += 1
+            subtag = str(tag) + "_0"
+            stats[subtag]["ex"] = stats[subtag]["ex"] + np.mean(V, 0)
+            stats[subtag]["ex2"] = stats[subtag]["ex2"] + np.mean(
+                np.square(V), 0
+            )
+            stats[subtag]["esigx"] = stats[subtag]["esigx"] + np.mean(
+                sigV, 0
+            )
+            stats[subtag]["esigx2"] = stats[subtag]["esigx2"] + np.mean(
+                np.square(sigV), 0
+            )
+            stats[subtag]["n"] += 1
 
-    np.save("results/stats_deezer", dict(stats))
+    np.save("../results/stats_deezer", dict(stats))

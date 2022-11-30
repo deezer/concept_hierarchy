@@ -21,7 +21,7 @@ from model_cav import CAVRegressor
 
 DATA_PATH = "../../dataset_ISMIR/deezer_anonymised_tracks"
 PLAYLIST_PATH = "../../dataset_ISMIR/deezer_playlists.npy"
-SAVE_DIR = "../CAV"
+SAVE_DIR = "../DEEZER_CAV"
 BS = 128  # training batch size
 
 

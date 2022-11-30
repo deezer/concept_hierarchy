@@ -13,12 +13,11 @@ from tqdm import tqdm
 
 THRESHOLD_PERF = 0.7  # 70% accuracy
 THRESHOLD_NB_TRACKS = 39
-SELECTED_LAYER = 2  # in [0 .. 3] for pool3, pool4, pool5, output
 
-perf_files = glob("weights/DEEZER_CAV/*_perf.npy")  # unavailable
-cav_files = glob("weights/DEEZER_CAV/*[0-9].npy")  # unavailable
+perf_files = glob("../DEEZER_CAV/*_perf.npy")
+cav_files = glob("../DEEZER_CAV/*[0-9].npy")
 
-playlists_path = "data/deezer_playlists.npy"
+playlists_path = "../../dataset_ISMIR/deezer_playlists.npy"
 playlists = np.load(playlists_path, allow_pickle=True).item()
 
 if __name__ == "__main__":
@@ -39,7 +38,7 @@ if __name__ == "__main__":
         if p_id not in filtered_cav_1:
             continue
         perf = np.load(perf_file)
-        cav_perfs[p_id] = perf[-4 + SELECTED_LAYER]  # tf.model.evaluate() returns the losses than the accuracies, hence -4
+        cav_perfs[p_id] = perf[1]  # test acc
         if cav_perfs[p_id] > THRESHOLD_PERF:
             filtered_cav_2.add(p_id)
         else:
@@ -71,4 +70,4 @@ if __name__ == "__main__":
         weights_np[cav] = np.concatenate(weights[cav], axis=-1)
         biases_np[cav] = np.stack(biases[cav], axis=1)
 
-    np.save("weights/deezer_CAV", (weights_np, biases_np, names))
+    np.save("../weights/deezer_CAV", (weights_np, biases_np, names))
