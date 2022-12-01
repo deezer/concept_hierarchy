@@ -1,0 +1,33 @@
+[tool.poetry]
+name = "Concept hierarchy"
+version = "1.0.0"
+description = ""
+authors = ["Deezer Research <<research@deezer.com>", "Darius Afchar <dafchar@deezer.com>"]
+packages = [
+    { include = "concept_hierarchy" }
+]
+
+[tool.poetry.dependencies]
+python = ">=3.9,<3.10"
+tensorflow = "^2.10.0"
+tqdm = "^4.64.1"
+networkx = "^2.8.8"
+numpy = "1.21.5"
+
+
+[tool.poetry.group.dev.dependencies]
+black = "*"
+isort = "*"
+pyflakes = "*"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.isort]
+profile = "black"
+multi_line_output = 3
+
+[tool.pytest.ini_options]
+addopts = "--cov-report xml:coverage.xml --cov=. --junitxml=xunit.xml"
+junit_family = "xunit2"
