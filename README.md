@@ -1,10 +1,16 @@
 # Learning Unsupervised Hierarchies of Audio Concepts
 
-This repository contains the Python (Tensorflow) code to reproduce the results of our accepted paper ["Learning Unsupervised Hierarchies of Audio Concepts"](https://arxiv.org/pdf/2207.11231.pdf) by D. Afchar, R. Hennequin and V. Guigue, that will be presented at [ISMIR 2022](https://ismir2022.ismir.net/) (December 4-8, 2022).
+This repository contains the Python (Tensorflow) code to reproduce the results of our accepted paper ["Learning Unsupervised Hierarchies of Audio Concepts"](https://arxiv.org/pdf/2207.11231.pdf) by D. Afchar, R. Hennequin and V. Guigue, that was presented at [ISMIR 2022](https://ismir2022.ismir.net/) (December 4-8, 2022).
 
 ## Result demo
 
 You can access results demos at [research.deezer.com/concept_hierarchy](http://research.deezer.com/concept_hierarchy/), which includes useful interactive visualisations of the obtained graphs, as well as additional figures to help better interpret our (dense) tables of results.
+
+## Video teaser
+
+Playback of my moment of fame during ISMIR 2022. Watch me trip from the stage at 0:16, a must-see!
+
+[![IMAGE ALT TEXT HERE](https://img.youtube.com/vi/5UhiMOkU5W8/0.jpg)](https://www.youtube.com/watch?v=5UhiMOkU5W8)
 
 
 ## Dataset
