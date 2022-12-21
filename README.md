@@ -6,11 +6,13 @@ This repository contains the Python (Tensorflow) code to reproduce the results o
 
 You can access results demos at [research.deezer.com/concept_hierarchy](http://research.deezer.com/concept_hierarchy/), which includes useful interactive visualisations of the obtained graphs, as well as additional figures to help better interpret our (dense) tables of results.
 
-## Video teaser
+## Conference material
 
-Playback of my moment of fame during ISMIR 2022. Watch me trip from the stage at 0:16, a must-see!
+Here is the playback of my moment of fame during ISMIR 2022. Watch me trip from the stage at 0:16, a must-see!
 
 [![IMAGE ALT TEXT HERE](https://img.youtube.com/vi/5UhiMOkU5W8/0.jpg)](https://www.youtube.com/watch?v=5UhiMOkU5W8)
+
+You can also find my [**poster online**](https://research.deezer.com/concept_hierarchy/poster_ismir_29_afchar.pdf).
 
 
 ## Dataset
